@@ -43,6 +43,52 @@ public class CalculatorActivityTest extends ActivityInstrumentationTestCase2<Cal
         checkInput("0");
     }
 
+    public void testAddition() throws Exception {
+        pressButton(R.id.number_2);
+        pressButton(R.id.number_0);
+        checkInput("20");
+        pressButton(R.id.plus);
+        pressButton(R.id.number_2);
+        pressButton(R.id.number_2);
+        checkInput("22");
+        pressButton(R.id.enter);
+        checkInput("42");
+    }
+
+    public void testSubtraction() throws Exception {
+        pressButton(R.id.number_1);
+        pressButton(R.id.number_0);
+        pressButton(R.id.number_0);
+        checkInput("100");
+        pressButton(R.id.minus);
+        pressButton(R.id.number_2);
+        pressButton(R.id.number_5);
+        checkInput("25");
+        pressButton(R.id.enter);
+        checkInput("75");
+    }
+
+    public void testLongCalculation() throws Exception {
+        pressButton(R.id.number_5);
+        pressButton(R.id.number_0);
+        checkInput("50");
+        pressButton(R.id.plus);
+        pressButton(R.id.number_8);
+        pressButton(R.id.number_6);
+        checkInput("86");
+        pressButton(R.id.minus);
+        checkInput("136");
+        pressButton(R.id.number_4);
+        pressButton(R.id.number_2);
+        checkInput("42");
+        pressButton(R.id.minus);
+        checkInput("94");
+        pressButton(R.id.number_8);
+        checkInput("8");
+        pressButton(R.id.enter);
+        checkInput("86");
+    }
+
     private void checkInput(String value) {
         onView(withId(R.id.input)).check(matches(withText(value)));
     }
