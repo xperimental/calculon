@@ -50,6 +50,7 @@
             <Button
                 android:id="@+id/plus"
                 style="@style/CalculatorButton"
+                android:onClick="onOperatorPressed"
                 android:text="@string/calculator_button_plus" />
 
         </LinearLayout>
@@ -81,6 +82,7 @@
             <Button
                 android:id="@+id/minus"
                 style="@style/CalculatorButton"
+                android:onClick="onOperatorPressed"
                 android:text="@string/calculator_button_minus" />
 
         </LinearLayout>
@@ -112,6 +114,7 @@
             <Button
                 android:id="@+id/multiply"
                 style="@style/CalculatorButton"
+                android:onClick="onOperatorPressed"
                 android:text="@string/calculator_button_mult" />
 
         </LinearLayout>
@@ -125,6 +128,7 @@
             <Button
                 android:id="@+id/clear"
                 style="@style/CalculatorButton"
+                android:onClick="onClearPressed"
                 android:text="@string/calculator_button_clear" />
 
             <Button
@@ -136,11 +140,13 @@
             <Button
                 android:id="@+id/enter"
                 style="@style/CalculatorButton"
+                android:onClick="onEnterPressed"
                 android:text="@string/calculator_button_enter" />
 
             <Button
                 android:id="@+id/divide"
                 style="@style/CalculatorButton"
+                android:onClick="onOperatorPressed"
                 android:text="@string/calculator_button_div" />
         </LinearLayout>
     </LinearLayout>
