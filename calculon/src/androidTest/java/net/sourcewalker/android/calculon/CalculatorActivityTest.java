@@ -21,26 +21,34 @@ public class CalculatorActivityTest extends ActivityInstrumentationTestCase2<Cal
     }
 
     public void testStartUp() throws Exception {
-        onView(withId(R.id.input)).check(matches(withText("0")));
+        checkInput("0");
     }
 
     public void testPressNumber() throws Exception {
-        onView(withId(R.id.number_5)).perform(click());
-        onView(withId(R.id.input)).check(matches(withText("5")));
+        pressButton(R.id.number_5);
+        checkInput("5");
     }
 
     public void testLongNumber() throws Exception {
-        onView(withId(R.id.number_4)).perform(click());
-        onView(withId(R.id.number_2)).perform(click());
-        onView(withId(R.id.input)).check(matches(withText("42")));
+        pressButton(R.id.number_4);
+        pressButton(R.id.number_2);
+        checkInput("42");
     }
 
     public void testClear() throws Exception {
-        onView(withId(R.id.input)).check(matches(withText("0")));
+        checkInput("0");
         onView(withText("9")).perform(click());
-        onView(withId(R.id.input)).check(matches(withText("9")));
-        onView(withId(R.id.clear)).perform(click());
-        onView(withId(R.id.input)).check(matches(withText("0")));
+        checkInput("9");
+        pressButton(R.id.clear);
+        checkInput("0");
+    }
+
+    private void checkInput(String value) {
+        onView(withId(R.id.input)).check(matches(withText(value)));
+    }
+
+    private void pressButton(int id) {
+        onView(withId(id)).perform(click());
     }
 
 }
