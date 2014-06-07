@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Calculon</string>
+    <string name="calculator_button_1">1</string>
+    <string name="calculator_button_2">2</string>
+    <string name="calculator_button_3">3</string>
+    <string name="calculator_button_4">4</string>
+    <string name="calculator_button_5">5</string>
+    <string name="calculator_button_6">6</string>
+    <string name="calculator_button_7">7</string>
+    <string name="calculator_button_8">8</string>
+    <string name="calculator_button_9">9</string>
+    <string name="calculator_button_0">0</string>
+    <string name="calculator_button_plus">+</string>
+    <string name="calculator_button_minus">-</string>
+    <string name="calculator_button_mult">*</string>
+    <string name="calculator_button_div">/</string>
+    <string name="calculator_button_enter">=</string>
+    <string name="calculator_button_clear">C</string>
 </resources>
