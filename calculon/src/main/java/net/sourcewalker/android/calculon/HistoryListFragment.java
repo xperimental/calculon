@@ -6,6 +6,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import net.sourcewalker.android.calculon.db.CalculatorProvider;
 
@@ -16,11 +19,27 @@ public class HistoryListFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         listAdapter = new HistoryAdapter(getActivity());
         setListAdapter(listAdapter);
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.history_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.option_clear) {
+            ClearHistoryTask task = new ClearHistoryTask(getActivity());
+            task.execute();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

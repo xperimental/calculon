@@ -18,4 +18,6 @@
     <string name="calculator_button_clear">C</string>
     <string name="option_recent">History</string>
     <string name="unknown_operation">\?</string>
+    <string name="option_clear">Clear history</string>
+    <string name="history_title">History</string>
 </resources>

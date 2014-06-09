@@ -19,11 +19,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".HistoryActivity" />
+        <activity
+            android:name=".HistoryActivity"
+            android:label="@string/history_title" />
 
         <provider
-            android:authorities="net.sourcewalker.android.calculon"
-            android:name=".db.CalculatorProvider" />
+            android:name=".db.CalculatorProvider"
+            android:authorities="net.sourcewalker.android.calculon" />
 
     </application>
 
