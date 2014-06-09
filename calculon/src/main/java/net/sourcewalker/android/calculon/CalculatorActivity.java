@@ -1,8 +1,10 @@
 package net.sourcewalker.android.calculon;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +19,7 @@ import net.sourcewalker.android.calculon.client.CalcServerRequest;
 import net.sourcewalker.android.calculon.client.RequestData;
 import net.sourcewalker.android.calculon.client.ResponseData;
 
-public class CalculatorActivity extends FragmentActivity {
+public class CalculatorActivity extends ActionBarActivity {
 
     private static final int OPERATOR_NONE = 0;
     private static final int OPERATOR_PLUS = 1;
@@ -25,7 +27,7 @@ public class CalculatorActivity extends FragmentActivity {
     private static final int OPERATOR_MULTIPLY = 3;
     private static final int OPERATOR_DIVIDE = 4;
 
-    private static final int[] BUTTONS = new int[] {
+    private static final int[] BUTTONS = new int[]{
             R.id.number_0,
             R.id.number_1,
             R.id.number_2,
@@ -78,6 +80,21 @@ public class CalculatorActivity extends FragmentActivity {
 
         // Cancel all pending requests
         requestQueue.cancelAll(ALL_REQUESTS);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.calculator_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.option_recent) {
+            // TODO show history activity here
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onNumberPressed(View view) {
