@@ -18,7 +18,8 @@ public class CalculatorActivityTest extends ActivityInstrumentationTestCase2<Cal
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        getActivity();
+        // Do not generate history while testing
+        getActivity().setProduceHistory(false);
     }
 
     public void testStartUp() throws Exception {

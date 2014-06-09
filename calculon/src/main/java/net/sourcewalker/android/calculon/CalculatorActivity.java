@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
+import net.sourcewalker.android.calculon.client.CalcResultListener;
 import net.sourcewalker.android.calculon.client.CalcServerRequest;
 import net.sourcewalker.android.calculon.client.RequestData;
 import net.sourcewalker.android.calculon.client.ResponseData;
@@ -47,15 +48,23 @@ public class CalculatorActivity extends ActionBarActivity {
         }
     };
 
+    public static final String OPERATION_MULTIPLY = "MULTIPLY";
+    public static final String OPERATION_DIVIDE = "DIVIDE";
+
     private RequestQueue requestQueue;
     private RequestListener requestListener;
     private EditText inputView;
     private int currentOperator = Constants.OPERATOR_NONE;
     private int savedValue = 0;
     private boolean clearOnInput = true;
+    private boolean produceHistory = true;
 
     public RequestQueue getRequestQueue() {
         return requestQueue;
+    }
+
+    public void setProduceHistory(boolean produceHistory) {
+        this.produceHistory = produceHistory;
     }
 
     @Override
@@ -147,14 +156,15 @@ public class CalculatorActivity extends ActionBarActivity {
 
     private void executeOperator() {
         int inputValue = getInputValue();
+        int result;
         switch (currentOperator) {
             case Constants.OPERATOR_PLUS:
-                savedValue = savedValue + inputValue;
-                inputView.setText(Integer.toString(savedValue));
+                result = savedValue + inputValue;
+                finishCalculation(savedValue, inputValue, currentOperator, result);
                 break;
             case Constants.OPERATOR_MINUS:
-                savedValue = savedValue - inputValue;
-                inputView.setText(Integer.toString(savedValue));
+                result = savedValue - inputValue;
+                finishCalculation(savedValue, inputValue, currentOperator, result);
                 break;
             case Constants.OPERATOR_MULTIPLY:
             case Constants.OPERATOR_DIVIDE:
@@ -163,21 +173,35 @@ public class CalculatorActivity extends ActionBarActivity {
         }
     }
 
+    private void finishCalculation(int operandOne, int operandTwo, int operation, int result) {
+        if (produceHistory) {
+            // Do database stuff in background
+            AppendHistoryTask task = new AppendHistoryTask(this);
+            task.execute(operandOne, operandTwo, operation, result);
+        }
+        savedValue = result;
+        inputView.setText(Integer.toString(savedValue));
+    }
+
     private void onlineCalculation(int operation, int opOne, int opTwo) {
         RequestData requestData = new RequestData();
-        switch (operation) {
-            case Constants.OPERATOR_MULTIPLY:
-                requestData.setOperation("MULTIPLY");
-                break;
-            case Constants.OPERATOR_DIVIDE:
-                requestData.setOperation("DIVIDE");
-                break;
-        }
+        requestData.setOperation(getStringOperation(operation));
         requestData.setOperandOne(opOne);
         requestData.setOperandTwo(opTwo);
         setStatusMessage("WAIT");
         CalcServerRequest request = new CalcServerRequest(requestData, requestListener);
         requestQueue.add(request);
+    }
+
+    private String getStringOperation(int operation) {
+        switch (operation) {
+            case Constants.OPERATOR_MULTIPLY:
+                return OPERATION_MULTIPLY;
+            case Constants.OPERATOR_DIVIDE:
+                return OPERATION_DIVIDE;
+            default:
+                return "";
+        }
     }
 
     public int getInputValue() {
@@ -205,9 +229,19 @@ public class CalculatorActivity extends ActionBarActivity {
 
         @Override
         public void onCalcResult(RequestData request, ResponseData response) {
-            savedValue = response.getResult();
-            inputView.setText(Integer.toString(savedValue));
+            finishCalculation(request.getOperandOne(), request.getOperandTwo(),
+                    getIntOperation(request.getOperation()), response.getResult());
             setUiEnabled(true);
+        }
+
+        private int getIntOperation(String operation) {
+            if (OPERATION_MULTIPLY.equals(operation)) {
+                return Constants.OPERATOR_MULTIPLY;
+            } else if (OPERATION_DIVIDE.equals(operation)) {
+                return Constants.OPERATOR_DIVIDE;
+            } else {
+                return Constants.OPERATOR_NONE;
+            }
         }
 
         @Override
