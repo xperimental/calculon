@@ -201,10 +201,10 @@ public class CalculatorActivity extends ActionBarActivity {
         }
     }
 
-    private final class RequestListener implements Response.Listener<ResponseData>, Response.ErrorListener {
+    private final class RequestListener implements CalcResultListener, Response.ErrorListener {
 
         @Override
-        public void onResponse(ResponseData response) {
+        public void onCalcResult(RequestData request, ResponseData response) {
             savedValue = response.getResult();
             inputView.setText(Integer.toString(savedValue));
             setUiEnabled(true);
@@ -214,7 +214,6 @@ public class CalculatorActivity extends ActionBarActivity {
         public void onErrorResponse(VolleyError error) {
             setStatusMessage("ERR!");
         }
-
     }
 
 }

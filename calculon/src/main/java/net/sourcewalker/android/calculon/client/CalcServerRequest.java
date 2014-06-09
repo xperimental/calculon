@@ -19,10 +19,10 @@ public class CalcServerRequest extends Request<ResponseData> {
     private static final String BASE_URL = "http://calculon-server.herokuapp.com";
 
     private final RequestData requestData;
-    private final Response.Listener<ResponseData> successListener;
+    private final CalcResultListener successListener;
     private final Gson gson;
 
-    public <T extends Response.Listener<ResponseData> & Response.ErrorListener> CalcServerRequest(RequestData requestData, T listener) {
+    public <T extends CalcResultListener & Response.ErrorListener> CalcServerRequest(RequestData requestData, T listener) {
         super(Method.POST, BASE_URL + "/calc", listener);
         this.requestData = requestData;
         this.successListener = listener;
@@ -59,7 +59,7 @@ public class CalcServerRequest extends Request<ResponseData> {
     @Override
     protected void deliverResponse(ResponseData response) {
         if (successListener != null) {
-            successListener.onResponse(response);
+            successListener.onCalcResult(requestData, response);
         }
     }
 
