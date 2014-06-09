@@ -17,4 +17,5 @@
     <string name="calculator_button_enter">=</string>
     <string name="calculator_button_clear">C</string>
     <string name="option_recent">History</string>
+    <string name="unknown_operation">\?</string>
 </resources>
