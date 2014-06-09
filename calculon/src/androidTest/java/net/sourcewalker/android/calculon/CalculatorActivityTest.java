@@ -3,6 +3,7 @@ package net.sourcewalker.android.calculon;
 import android.test.ActivityInstrumentationTestCase2;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
+import static com.google.android.apps.common.testing.ui.espresso.Espresso.registerIdlingResources;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
@@ -87,6 +88,40 @@ public class CalculatorActivityTest extends ActivityInstrumentationTestCase2<Cal
         checkInput("8");
         pressButton(R.id.enter);
         checkInput("86");
+    }
+
+    public void testServerOperation() throws Exception {
+        VolleyIdlingResource resource = new VolleyIdlingResource(getActivity().getRequestQueue());
+        registerIdlingResources(resource);
+        pressButton(R.id.number_5);
+        checkInput("5");
+        pressButton(R.id.multiply);
+        pressButton(R.id.number_2);
+        checkInput("2");
+        pressButton(R.id.enter);
+        checkInput("10");
+    }
+
+    public void testLongServerOperation() throws Exception {
+        VolleyIdlingResource resource = new VolleyIdlingResource(getActivity().getRequestQueue());
+        registerIdlingResources(resource);
+        pressButton(R.id.number_8);
+        pressButton(R.id.number_0);
+        checkInput("80");
+        pressButton(R.id.multiply);
+        pressButton(R.id.number_2);
+        checkInput("2");
+        pressButton(R.id.divide);
+        checkInput("160");
+        pressButton(R.id.number_1);
+        pressButton(R.id.number_0);
+        checkInput("10");
+        pressButton(R.id.plus);
+        checkInput("16");
+        pressButton(R.id.number_4);
+        checkInput("4");
+        pressButton(R.id.enter);
+        checkInput("20");
     }
 
     private void checkInput(String value) {

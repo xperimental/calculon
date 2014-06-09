@@ -57,6 +57,10 @@ public class CalculatorActivity extends FragmentActivity {
     private int savedValue = 0;
     private boolean clearOnInput = true;
 
+    public RequestQueue getRequestQueue() {
+        return requestQueue;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,7 +193,8 @@ public class CalculatorActivity extends FragmentActivity {
 
         @Override
         public void onResponse(ResponseData response) {
-            inputView.setText(Integer.toString(response.getResult()));
+            savedValue = response.getResult();
+            inputView.setText(Integer.toString(savedValue));
             setUiEnabled(true);
         }
 
