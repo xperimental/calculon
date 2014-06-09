@@ -21,12 +21,6 @@ import net.sourcewalker.android.calculon.client.ResponseData;
 
 public class CalculatorActivity extends ActionBarActivity {
 
-    private static final int OPERATOR_NONE = 0;
-    private static final int OPERATOR_PLUS = 1;
-    private static final int OPERATOR_MINUS = 2;
-    private static final int OPERATOR_MULTIPLY = 3;
-    private static final int OPERATOR_DIVIDE = 4;
-
     private static final int[] BUTTONS = new int[]{
             R.id.number_0,
             R.id.number_1,
@@ -55,7 +49,7 @@ public class CalculatorActivity extends ActionBarActivity {
     private RequestQueue requestQueue;
     private RequestListener requestListener;
     private EditText inputView;
-    private int currentOperator = OPERATOR_NONE;
+    private int currentOperator = Constants.OPERATOR_NONE;
     private int savedValue = 0;
     private boolean clearOnInput = true;
 
@@ -114,7 +108,7 @@ public class CalculatorActivity extends ActionBarActivity {
         requestQueue.cancelAll(ALL_REQUESTS);
         setUiEnabled(true);
         inputView.setText("0");
-        currentOperator = OPERATOR_NONE;
+        currentOperator = Constants.OPERATOR_NONE;
         savedValue = 0;
         clearOnInput = true;
     }
@@ -122,27 +116,27 @@ public class CalculatorActivity extends ActionBarActivity {
     public void onOperatorPressed(View view) {
         switch (view.getId()) {
             case R.id.plus:
-                setOperator(OPERATOR_PLUS);
+                setOperator(Constants.OPERATOR_PLUS);
                 break;
             case R.id.minus:
-                setOperator(OPERATOR_MINUS);
+                setOperator(Constants.OPERATOR_MINUS);
                 break;
             case R.id.multiply:
-                setOperator(OPERATOR_MULTIPLY);
+                setOperator(Constants.OPERATOR_MULTIPLY);
                 break;
             case R.id.divide:
-                setOperator(OPERATOR_DIVIDE);
+                setOperator(Constants.OPERATOR_DIVIDE);
                 break;
         }
     }
 
     public void onEnterPressed(View view) {
         executeOperator();
-        currentOperator = OPERATOR_NONE;
+        currentOperator = Constants.OPERATOR_NONE;
     }
 
     private void setOperator(int operator) {
-        if (currentOperator != OPERATOR_NONE) {
+        if (currentOperator != Constants.OPERATOR_NONE) {
             executeOperator();
         }
         currentOperator = operator;
@@ -153,16 +147,16 @@ public class CalculatorActivity extends ActionBarActivity {
     private void executeOperator() {
         int inputValue = getInputValue();
         switch (currentOperator) {
-            case OPERATOR_PLUS:
+            case Constants.OPERATOR_PLUS:
                 savedValue = savedValue + inputValue;
                 inputView.setText(Integer.toString(savedValue));
                 break;
-            case OPERATOR_MINUS:
+            case Constants.OPERATOR_MINUS:
                 savedValue = savedValue - inputValue;
                 inputView.setText(Integer.toString(savedValue));
                 break;
-            case OPERATOR_MULTIPLY:
-            case OPERATOR_DIVIDE:
+            case Constants.OPERATOR_MULTIPLY:
+            case Constants.OPERATOR_DIVIDE:
                 onlineCalculation(currentOperator, savedValue, inputValue);
                 break;
         }
@@ -171,10 +165,10 @@ public class CalculatorActivity extends ActionBarActivity {
     private void onlineCalculation(int operation, int opOne, int opTwo) {
         RequestData requestData = new RequestData();
         switch (operation) {
-            case OPERATOR_MULTIPLY:
+            case Constants.OPERATOR_MULTIPLY:
                 requestData.setOperation("MULTIPLY");
                 break;
-            case OPERATOR_DIVIDE:
+            case Constants.OPERATOR_DIVIDE:
                 requestData.setOperation("DIVIDE");
                 break;
         }
