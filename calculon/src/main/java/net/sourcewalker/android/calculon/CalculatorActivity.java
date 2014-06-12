@@ -21,7 +21,7 @@ import net.sourcewalker.android.calculon.client.CalcServerRequest;
 import net.sourcewalker.android.calculon.client.RequestData;
 import net.sourcewalker.android.calculon.client.ResponseData;
 
-public class CalculatorActivity extends ActionBarActivity {
+public class CalculatorActivity extends ActionBarActivity implements NetworkStatusHelper.NetworkListener {
 
     private static final int[] BUTTONS = new int[]{
             R.id.number_0,
@@ -36,9 +36,12 @@ public class CalculatorActivity extends ActionBarActivity {
             R.id.number_9,
             R.id.plus,
             R.id.minus,
-            R.id.multiply,
-            R.id.divide,
             R.id.enter
+    };
+
+    private static final int[] NETWORK_BUTTONS = new int[]{
+            R.id.multiply,
+            R.id.divide
     };
 
     private static final RequestQueue.RequestFilter ALL_REQUESTS = new RequestQueue.RequestFilter() {
@@ -53,6 +56,7 @@ public class CalculatorActivity extends ActionBarActivity {
 
     private RequestQueue requestQueue;
     private RequestListener requestListener;
+    private NetworkStatusHelper networkHelper;
     private EditText inputView;
     private int currentOperator = Constants.OPERATOR_NONE;
     private int savedValue = 0;
@@ -74,13 +78,24 @@ public class CalculatorActivity extends ActionBarActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         requestListener = new RequestListener();
+        networkHelper = new NetworkStatusHelper(this);
+        networkHelper.setListener(this);
 
         inputView = (EditText) findViewById(R.id.input);
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        networkHelper.onResume();
+
+        updateServerButtons();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        networkHelper.onPause();
 
         // Cancel all pending requests
         requestQueue.cancelAll(ALL_REQUESTS);
@@ -99,6 +114,11 @@ public class CalculatorActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNetworkChange(boolean connected) {
+        updateServerButtons();
     }
 
     public void onNumberPressed(View view) {
@@ -143,6 +163,14 @@ public class CalculatorActivity extends ActionBarActivity {
     public void onEnterPressed(View view) {
         executeOperator();
         currentOperator = Constants.OPERATOR_NONE;
+    }
+
+    private void updateServerButtons() {
+        boolean connected = networkHelper.isConnected();
+        for (int viewId : NETWORK_BUTTONS) {
+            View v = findViewById(viewId);
+            v.setEnabled(connected);
+        }
     }
 
     private void setOperator(int operator) {
@@ -222,6 +250,10 @@ public class CalculatorActivity extends ActionBarActivity {
     private void setUiEnabled(boolean enabled) {
         for (int id : BUTTONS) {
             findViewById(id).setEnabled(enabled);
+        }
+        boolean connected = networkHelper.isConnected();
+        for (int id : NETWORK_BUTTONS) {
+            findViewById(id).setEnabled(enabled && connected);
         }
     }
 
