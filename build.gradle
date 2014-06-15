@@ -13,6 +13,11 @@ buildscript {
 }
 
 allprojects {
+    // Base version on git commit
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    version = "1.0-" + proc.text.trim()
+
     repositories {
         mavenCentral()
     }

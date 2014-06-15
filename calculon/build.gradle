@@ -9,14 +9,23 @@ android {
         minSdkVersion 8
         targetSdkVersion 19
         versionCode 1
-        versionName "1.0"
+        versionName version
 
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file(optProperty("keystore.file", "keystore.jks"))
+            storePassword optProperty("keystore.password", "")
+            keyAlias "calculon"
+            keyPassword "calculon"
+        }
+    }
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     packagingOptions {
@@ -32,4 +41,12 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.4'
 
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
+}
+
+def optProperty(String name, String fallback) {
+    if (hasProperty(name)) {
+        return property(name);
+    } else {
+        return fallback;
+    }
 }
